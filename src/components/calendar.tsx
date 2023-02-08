@@ -9,6 +9,8 @@ export default function Calendar() {
 
     const addEvent = (event: Event) => {
         setEvents([...events, event])
+        console.log("events", events)
+        
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +22,14 @@ export default function Calendar() {
         addEvent(form)
         setForm({ name: '', day: '', time: '' })
     }
+
+    const handleDelete = (event: Event) => {
+        const newEvents = [...events].filter(function( obj ) {
+            return obj.name !== event.name && obj.day !== event.day && obj.time !== event.time
+        });        
+        setEvents(newEvents);
+      };
+    
         
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const times = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
@@ -41,12 +51,18 @@ export default function Calendar() {
                         <td className={styles.disabled}>{time}</td>
                         {days.map((day) => {
                             const dayEvents = events.filter((event) => event.day === day && event.time === time)
+                            
                             return (
-                                <td key={`${day}-${time}`}>
+                                <td onClick={() => setForm({name: '', day: day, time: time})}>
                                 {dayEvents.map((event, index) => (
-                                    <div key={event.name}>
-                                        {event.name}
-                                    </div>
+                                        <div
+                                            onContextMenu={() => handleDelete(event)}
+                                            key={event.name}
+                                            style={{width: `${100 / dayEvents.length}`}}
+                                            className={styles.dayEvent}
+                                        >
+                                            {event.name}
+                                        </div>
                                 ))}
                                 </td>
                             )
