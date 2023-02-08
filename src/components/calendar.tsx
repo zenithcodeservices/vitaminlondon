@@ -39,9 +39,18 @@ export default function Calendar() {
                 {times.map((time) => (
                     <tr key={time}>
                         <td className={styles.disabled}>{time}</td>
-                        {days.map((day) => (
-                            <td key={`${day}-${time}`} />
-                        ))}
+                        {days.map((day) => {
+                            const dayEvents = events.filter((event) => event.day === day && event.time === time)
+                            return (
+                                <td key={`${day}-${time}`}>
+                                {dayEvents.map((event, index) => (
+                                    <div key={event.name}>
+                                        {event.name}
+                                    </div>
+                                ))}
+                                </td>
+                            )
+                        })}
                     </tr>
                 ))}
             </tbody>
